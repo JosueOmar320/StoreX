@@ -15,6 +15,7 @@ namespace StoreX.Infrastructure.DependencyInjection
         {
             // Repositorios
             services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             // Servicios externos o técnicos si tienes
             // services.AddTransient<IEmailSender, EmailSender>();

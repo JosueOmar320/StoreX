@@ -9,21 +9,18 @@ using System.Threading.Tasks;
 
 namespace StoreX.Domain.Entities
 {
-    public class Product
+    public class ProductCategory
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductId { get; set; }
 
-        [Required]
-        [MaxLength(200)]
-        public string Name { get; set; }
+        [JsonIgnore]
+        [ForeignKey("ProductId")]
+        public Product? Product { get; set; }
 
-        [Required]
-        public int BrandId { get; set; }
+        public int CategoryId { get; set; }
 
         [JsonIgnore]
-        [ForeignKey("BrandId")]
-        public Brand? Brand { get; set; }
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; } 
     }
 }

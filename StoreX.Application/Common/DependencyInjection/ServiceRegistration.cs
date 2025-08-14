@@ -15,7 +15,7 @@ namespace StoreX.Application.Common.DependencyInjection
         {
             // Agrega aquí los servicios generales o específicos
             services.AddScoped<IBrandService, BrandService>();
-            // services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductService, ProductService>();
 
             return services;
         }
