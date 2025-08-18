@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StoreX.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,10 +14,10 @@ namespace StoreX.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long MovementLineId { get; set; }
+        public int MovementLineId { get; set; }
 
         [Required]
-        public long MovementId { get; set; }
+        public int MovementId { get; set; }
 
         [Required]
         public int ProductId { get; set; }

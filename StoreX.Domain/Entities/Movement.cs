@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StoreX.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,11 +14,15 @@ namespace StoreX.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long MovementId { get; set; }
-        //public byte MovementType
-        [Required]
-        public DateTime CreatedAt { get; set; }
+        public int MovementId { get; set; }
 
+        [Required]
+        public MovementType MovementType { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [JsonIgnore]
         [Required]
         public int CreatedBy { get; set; }
 

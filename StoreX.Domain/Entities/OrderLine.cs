@@ -9,26 +9,29 @@ using System.Threading.Tasks;
 
 namespace StoreX.Domain.Entities
 {
-    public class Inventory
+    public class OrderLine
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int InventoryId { get; set; }
+        public int OrderLineId { get; set; }
+
+        [Required]
+        public int OrderId { get; set; }
 
         [Required]
         public int ProductId { get; set; }
 
         [Required]
-        public decimal QuantityAvailable { get; set; } = 0;
+        public int Quantity { get; set; }
 
         [Required]
-        public decimal QuantityReserverd { get; set; } = decimal.Zero;
+        public decimal UnitPrice { get; set; }
 
         [JsonIgnore]
-        [Required]
-        public DateTime LastUpdate { get; set; } = DateTime.UtcNow;
+        [ForeignKey("OrderId")]
+        public Order? Order { get; set; }
 
-        [JsonIgnore]
+        [JsonIgnore]    
         [ForeignKey("ProductId")]
         public Product? Product { get; set; }
     }

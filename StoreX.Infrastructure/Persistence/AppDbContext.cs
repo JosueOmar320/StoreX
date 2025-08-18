@@ -15,9 +15,14 @@ namespace StoreX.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            #region ProductCategory Relationship
             modelBuilder.Entity<ProductCategory>()
                 .HasKey(pc => new { pc.ProductId, pc.CategoryId });
 
+            #endregion
+
+            #region Product Default values
             modelBuilder.Entity<User>()
                 .Property(p => p.IsActive)
                 .HasDefaultValue(true)   // DEFAULT en DB
@@ -28,6 +33,50 @@ namespace StoreX.Infrastructure.Persistence
              .HasDefaultValueSql("GETUTCDATE()")  // se evalúa en el servidor al insertar
              .IsRequired();
 
+            #endregion
+
+            #region Movement Default values
+            modelBuilder.Entity<Movement>()
+             .Property(p => p.CreatedAt)
+             .HasDefaultValueSql("GETUTCDATE()")  // se evalúa en el servidor al insertar
+             .IsRequired();           // NOT NULL'
+
+            #endregion
+
+            #region Inventory Default values
+            modelBuilder.Entity<Inventory>()
+             .Property(p => p.LastUpdate)
+             .HasDefaultValueSql("GETUTCDATE()")  // se evalúa en el servidor al insertar
+             .IsRequired();           // NOT NULL'
+
+            #endregion
+
+            #region Supplier Default values
+            modelBuilder.Entity<Supplier>()
+            .Property(p => p.CreatedAt)
+            .HasDefaultValueSql("GETUTCDATE()")  // se evalúa en el servidor al insertar
+            .IsRequired();           // NOT NULL'
+
+            modelBuilder.Entity<Supplier>()
+            .Property(p => p.IsActive)
+            .HasDefaultValue(true)  // se evalúa en el servidor al insertar
+            .IsRequired();           // NOT NULL'
+
+            #endregion
+
+            #region Customer Default values
+            modelBuilder.Entity<Customer>()
+                .Property(p => p.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()")  // se evalúa en el servidor al insertar
+                .IsRequired();           // NOT NULL'
+
+            modelBuilder.Entity<Customer>()
+               .Property(p => p.IsActive)
+               .HasDefaultValue(true)  // se evalúa en el servidor al insertar
+               .IsRequired();           // NOT NULL'
+
+            #endregion
+
         }
         // Define DbSets for your entities
         public DbSet<Brand> Brands => Set<Brand>();
@@ -35,5 +84,11 @@ namespace StoreX.Infrastructure.Persistence
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
         public DbSet<User> Users => Set<User>();
+        public DbSet<Movement> Movements => Set<Movement>();
+        public DbSet<MovementLine> MovementLines => Set<MovementLine>();
+        public DbSet<Customer> Customers => Set<Customer>();
+        public DbSet<Supplier> Suppliers => Set<Supplier>();
+        public DbSet<Inventory> Inventories => Set<Inventory>();
+        public DbSet<ProductSupplier> ProductSuppliers => Set<ProductSupplier>();
     }
 }

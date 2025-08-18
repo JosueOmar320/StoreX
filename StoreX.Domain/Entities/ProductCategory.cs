@@ -11,16 +11,18 @@ namespace StoreX.Domain.Entities
 {
     public class ProductCategory
     {
+        [Required]
         public int ProductId { get; set; }
 
         [JsonIgnore]
         [ForeignKey("ProductId")]
         public Product? Product { get; set; }
 
+        [Required]
         public int CategoryId { get; set; }
 
         [JsonIgnore]
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; } 
+        public Category? Category { get; set; } 
     }
 }

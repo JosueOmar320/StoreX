@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace StoreX.Domain.Entities
 {
-    public class User
+    public class Order
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
+        public int OrderId { get; set; }
 
         [Required]
-        [MaxLength(100)]
-        public required string UserName { get; set; } 
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public int CreatedBy { get; set; }
 
         [JsonIgnore]
-        public bool IsActive { get; set; } = true;
-
-        [JsonIgnore]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [ForeignKey("CreatedBy")]
+        public User? User { get; set; }
     }
 }

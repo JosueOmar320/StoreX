@@ -17,7 +17,7 @@ namespace StoreX.Domain.Entities
 
         [Required]
         [MaxLength(200)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [Required]
         public int BrandId { get; set; }

@@ -9,24 +9,30 @@ using System.Threading.Tasks;
 
 namespace StoreX.Domain.Entities
 {
-    public class Inventory
+    public class PurchaseOrderLine
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int InventoryId { get; set; }
+        public int PurchaseOrderLineId { get; set; }
+
+        [Required]
+        public int PurchaseOrderId { get; set; }
 
         [Required]
         public int ProductId { get; set; }
 
         [Required]
-        public decimal QuantityAvailable { get; set; } = 0;
+        public int Quantity { get; set; }
 
         [Required]
-        public decimal QuantityReserverd { get; set; } = decimal.Zero;
+        public decimal UnitPrice { get; set; }
+
+        [NotMapped]
+        public decimal? TotalPrice => Quantity * UnitPrice;
 
         [JsonIgnore]
-        [Required]
-        public DateTime LastUpdate { get; set; } = DateTime.UtcNow;
+        [ForeignKey("PurchaseOrderId")]
+        public PurchaseOrder? PurchaseOrder { get; set; }
 
         [JsonIgnore]
         [ForeignKey("ProductId")]
