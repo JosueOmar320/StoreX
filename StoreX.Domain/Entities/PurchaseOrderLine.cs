@@ -22,13 +22,15 @@ namespace StoreX.Domain.Entities
         public int ProductId { get; set; }
 
         [Required]
-        public int Quantity { get; set; }
+        public decimal QuantityOrdered { get; set; }
+
+        public decimal? QuantityReceived { get; set; }
 
         [Required]
         public decimal UnitPrice { get; set; }
 
-        [NotMapped]
-        public decimal? TotalPrice => Quantity * UnitPrice;
+        //[NotMapped]
+        //public decimal? TotalPrice => Quantity * UnitPrice;
 
         [JsonIgnore]
         [ForeignKey("PurchaseOrderId")]

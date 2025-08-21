@@ -15,6 +15,8 @@ namespace StoreX.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MovementId { get; set; }
+        public string SourceType { get; set; } // "PurchaseOrder", "SalesOrder", "Adjustment", etc.
+        public long SourceId { get; set; }
 
         [Required]
         public MovementType MovementType { get; set; }

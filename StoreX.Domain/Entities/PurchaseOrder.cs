@@ -21,6 +21,8 @@ namespace StoreX.Domain.Entities
         [Required]
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
+        //public status status { get; set; } = status.Pending;
+
         [Required]
         public int CreatedBy { get; set; }
 

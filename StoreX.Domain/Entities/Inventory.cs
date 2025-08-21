@@ -24,6 +24,9 @@ namespace StoreX.Domain.Entities
         [Required]
         public decimal QuantityReserverd { get; set; } = decimal.Zero;
 
+        [Required]
+        public decimal AverageCost { get; set; } = decimal.Zero;
+
         [JsonIgnore]
         [Required]
         public DateTime LastUpdate { get; set; } = DateTime.UtcNow;
