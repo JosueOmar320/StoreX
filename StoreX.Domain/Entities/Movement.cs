@@ -15,8 +15,10 @@ namespace StoreX.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MovementId { get; set; }
-        public string SourceType { get; set; } // "PurchaseOrder", "SalesOrder", "Adjustment", etc.
-        public long SourceId { get; set; }
+        //public required string SourceType { get; set; } // "PurchaseOrder", "SalesOrder", "Adjustment", etc.
+        //public long SourceId { get; set; }
+        public int? PurchaseOrderId { get; set; }
+        public int? OrderId { get; set; }
 
         [Required]
         public MovementType MovementType { get; set; }
@@ -31,5 +33,13 @@ namespace StoreX.Domain.Entities
         [JsonIgnore]
         [ForeignKey("CreatedBy")]
         public User? User { get; set; }
+
+        [JsonIgnore]
+        [ForeignKey("PurchaseOrderId")]
+        public PurchaseOrder? PurchaseOrder { get; set; }
+
+        [JsonIgnore]
+        [ForeignKey("OrderId")]
+        public Order? Order { get; set; }
     }
 }
