@@ -9,35 +9,29 @@ using System.Threading.Tasks;
 
 namespace StoreX.Domain.Entities
 {
-    public class OrderLine
+    public class Payment
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int OrderLineId { get; set; }
+        public int PaymentId { get; set; }
 
         [Required]
         public int OrderId { get; set; }
 
         [Required]
-        public int ProductId { get; set; }
+        public required string Method { get; set; } // "Cash", "Card", "Transfer"
 
         [Required]
-        public decimal Quantity { get; set; } 
+        public decimal Amount { get; set; }
 
-        [Required]
-        public decimal UnitPrice { get; set; }
-
-        public decimal Discount { get; set; } = 0;
-
-        [NotMapped]
-        public decimal TotalLine => (Quantity * UnitPrice) - Discount;
+        public long? CashMovementId { get; set; } // Solo si es efectivo
 
         [JsonIgnore]
         [ForeignKey("OrderId")]
         public Order? Order { get; set; }
 
-        [JsonIgnore]    
-        [ForeignKey("ProductId")]
-        public Product? Product { get; set; }
+        [JsonIgnore]
+        [ForeignKey("CashMovementId")]
+        public CashMovement? CashMovement { get; set; }
     }
 }

@@ -22,6 +22,24 @@ namespace StoreX.Infrastructure.Persistence
 
             #endregion
 
+            #region RolePermission Relationship
+            modelBuilder.Entity<RolePermission>()
+                .HasKey(pc => new { pc.PermissionId, pc.RoleId });
+
+            #endregion
+
+            #region UserRole Relationship
+            modelBuilder.Entity<UserRole>()
+                .HasKey(pc => new { pc.User, pc.RoleId });
+
+            #endregion
+
+            #region UserPermission Relationship
+            modelBuilder.Entity<UserPermission>()
+                .HasKey(pc => new { pc.PermissionId, pc.User });
+
+            #endregion
+
             #region Product Default values
             modelBuilder.Entity<User>()
                 .Property(p => p.IsActive)
