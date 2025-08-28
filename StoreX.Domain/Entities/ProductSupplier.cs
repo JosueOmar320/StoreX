@@ -13,7 +13,7 @@ namespace StoreX.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long ProductSupplierId { get; set; }
+        public long ProductSupplierId { get; set; } //test
 
         [Required]
         public int ProductId { get; set; }
