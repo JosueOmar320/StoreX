@@ -24,7 +24,7 @@ namespace StoreX.Domain.Entities
         [Required]
         public decimal Amount { get; set; }
 
-        public long? CashMovementId { get; set; } // Solo si es efectivo
+        public int? CashMovementId { get; set; } // Solo si es efectivo
 
         [JsonIgnore]
         [ForeignKey("OrderId")]

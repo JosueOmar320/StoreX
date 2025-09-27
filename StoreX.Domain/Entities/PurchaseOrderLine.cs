@@ -29,8 +29,11 @@ namespace StoreX.Domain.Entities
         [Required]
         public decimal UnitPrice { get; set; }
 
-        //[NotMapped]
-        //public decimal? TotalPrice => Quantity * UnitPrice;
+        [NotMapped]
+        public decimal TotalPendingPrice => (QuantityOrdered - (QuantityReceived ?? 0)) * UnitPrice;
+
+        [NotMapped]
+        public decimal TotalReceivedPrice => (QuantityReceived ?? 0) * UnitPrice;
 
         [JsonIgnore]
         [ForeignKey("PurchaseOrderId")]

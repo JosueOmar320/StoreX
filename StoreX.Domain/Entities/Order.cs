@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StoreX.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,7 +21,7 @@ namespace StoreX.Domain.Entities
 
         public int? CustomerId { get; set; }
 
-        //public status status { get; set; } = status.Pending;
+        public CustomerOrderStatus Status { get; set; } = CustomerOrderStatus.Pending;
 
         [Required]
         public decimal SubTotal { get; set; } = 0;

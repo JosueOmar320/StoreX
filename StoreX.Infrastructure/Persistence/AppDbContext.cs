@@ -30,13 +30,13 @@ namespace StoreX.Infrastructure.Persistence
 
             #region UserRole Relationship
             modelBuilder.Entity<UserRole>()
-                .HasKey(pc => new { pc.User, pc.RoleId });
+                .HasKey(pc => new { pc.UserId, pc.RoleId });
 
             #endregion
 
             #region UserPermission Relationship
             modelBuilder.Entity<UserPermission>()
-                .HasKey(pc => new { pc.PermissionId, pc.User });
+                .HasKey(pc => new { pc.PermissionId, pc.UserId });
 
             #endregion
 
@@ -108,5 +108,18 @@ namespace StoreX.Infrastructure.Persistence
         public DbSet<Supplier> Suppliers => Set<Supplier>();
         public DbSet<Inventory> Inventories => Set<Inventory>();
         public DbSet<ProductSupplier> ProductSuppliers => Set<ProductSupplier>();
+        public DbSet<CashMovement> CashMovements => Set<CashMovement>();
+        public DbSet<CashSession> CashSessions => Set<CashSession>();
+        public DbSet<Order> Orders => Set<Order>();
+        public DbSet<OrderLine> OrderLines => Set<OrderLine>();
+        public DbSet<Payment> Payments => Set<Payment>();
+        public DbSet<Permission> Permissions => Set<Permission>();
+        public DbSet<ProductPrice> ProductPrices => Set<ProductPrice>();
+        public DbSet<PurchaseOrder> PurchaseOrders => Set<PurchaseOrder>();
+        public DbSet<PurchaseOrderLine> PurchaseOrderLines => Set<PurchaseOrderLine>();
+        public DbSet<Role> Roles => Set<Role>();
+        public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
+        public DbSet<UserPermission> UserPermissions => Set<UserPermission>();
+        public DbSet<UserRole> UserRoles => Set<UserRole>();
     }
 }

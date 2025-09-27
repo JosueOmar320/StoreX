@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StoreX.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,7 +22,7 @@ namespace StoreX.Domain.Entities
         [Required]
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
-        //public status status { get; set; } = status.Pending;
+        public PurchaseOrderStatus Status { get; set; } = PurchaseOrderStatus.Draft;
 
         [Required]
         public int CreatedBy { get; set; }

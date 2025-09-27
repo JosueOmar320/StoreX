@@ -36,7 +36,6 @@ namespace StoreX.Domain.Entities
         [Required]
         [JsonIgnore]
         public bool IsActive { get; set; } = true;
-        // Navigation property for related products
 
         [JsonIgnore]
         public ICollection<Product>? Products { get; set; }

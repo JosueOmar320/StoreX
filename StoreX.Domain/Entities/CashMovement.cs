@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StoreX.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,7 +20,7 @@ namespace StoreX.Domain.Entities
         public int CashSessionId { get; set; }
 
         [Required]
-        public required string Type { get; set; }  // "IN" o "OUT"
+        public CashMovementType CashMovementType { get; set; }
 
         [Required]
         public decimal Amount { get; set; }
