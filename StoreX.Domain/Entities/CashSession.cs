@@ -9,21 +9,27 @@ using System.Threading.Tasks;
 
 namespace StoreX.Domain.Entities
 {
-    public class Product
+    public class CashSession
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProductId { get; set; }
+        public int CashSessionId { get; set; }
 
         [Required]
-        [MaxLength(200)]
-        public required string Name { get; set; }
+        public int UserId { get; set; }   // Cajero
 
         [Required]
-        public int BrandId { get; set; }
+        public DateTime OpenedAt { get; set; }
+
+        public DateTime? ClosedAt { get; set; }
+
+        [Required]
+        public decimal OpeningBalance { get; set; } = decimal.Zero;
+
+        public decimal? ClosingBalance { get; set; }
 
         [JsonIgnore]
-        [ForeignKey("BrandId")]
-        public Brand? Brand { get; set; }
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
     }
 }

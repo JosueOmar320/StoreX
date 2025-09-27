@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace StoreX.Domain.Entities
 {
-    public class ProductCategory
+    public class User
     {
-        [Required]
-        public int ProductId { get; set; }
-
-        [JsonIgnore]
-        [ForeignKey("ProductId")]
-        public Product? Product { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int UserId { get; set; }
 
         [Required]
-        public int CategoryId { get; set; }
+        [MaxLength(100)]
+        public required string UserName { get; set; } 
 
         [JsonIgnore]
-        [ForeignKey("CategoryId")]
-        public Category? Category { get; set; } 
+        public bool IsActive { get; set; } = true;
+
+        [JsonIgnore]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
