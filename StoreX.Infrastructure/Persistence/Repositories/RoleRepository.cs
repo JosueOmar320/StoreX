@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using StoreX.Domain.Entities;
 using StoreX.Domain.Interfaces;
 
-
 namespace StoreX.Infrastructure.Persistence.Repositories
 {
     public class RoleRepository : IRoleRepository
@@ -26,25 +25,40 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return role;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<Role> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var existingRole = await _context.Roles.FindAsync(id);
+            if (existingRole == null)
+                return null;
+
+            return existingRole;
+        }
+
+        public async Task<Role> UpdateAsync(Role role)
+        {
+            var existingRole = await _context.Roles.FindAsync(role.RoleId);
+            if (existingRole == null)
+                return null;
+
+            _context.Entry(existingRole).CurrentValues.SetValues(role);
+            await _context.SaveChangesAsync();
+            return existingRole;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var role = await _context.Roles.FindAsync(id);
+            if (role == null)
+                return false;
+
+            _context.Roles.Remove(role);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IEnumerable<Role>> GetAllAsync()
         {
             return await _context.Roles.ToListAsync();
         }
-
-        public Task<Role> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Role> UpdateAsync(Role role)
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }

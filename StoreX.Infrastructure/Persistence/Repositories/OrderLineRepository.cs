@@ -25,24 +25,40 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return orderLine;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<OrderLine> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var existingOrderLine = await _context.OrderLines.FindAsync(id);
+            if (existingOrderLine == null)
+                return null;
+
+            return existingOrderLine;
+        }
+
+        public async Task<OrderLine> UpdateAsync(OrderLine orderLine)
+        {
+            var existingOrderLine = await _context.OrderLines.FindAsync(orderLine.OrderLineId);
+            if (existingOrderLine == null)
+                return null;
+
+            _context.Entry(existingOrderLine).CurrentValues.SetValues(orderLine);
+            await _context.SaveChangesAsync();
+            return existingOrderLine;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var orderLine = await _context.OrderLines.FindAsync(id);
+            if (orderLine == null)
+                return false;
+
+            _context.OrderLines.Remove(orderLine);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IEnumerable<OrderLine>> GetAllAsync()
         {
             return await _context.OrderLines.ToListAsync();
-        }
-
-        public Task<OrderLine> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<OrderLine> UpdateAsync(OrderLine orderLine)
-        {
-            throw new NotImplementedException();
         }
     }
 }

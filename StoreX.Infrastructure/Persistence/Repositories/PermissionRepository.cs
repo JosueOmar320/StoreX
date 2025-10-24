@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using StoreX.Domain.Entities;
 using StoreX.Domain.Interfaces;
 
-
 namespace StoreX.Infrastructure.Persistence.Repositories
 {
     public class PermissionRepository : IPermissionRepository
@@ -26,25 +25,40 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return permission;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<Permission> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var existingPermission = await _context.Permissions.FindAsync(id);
+            if (existingPermission == null)
+                return null;
+
+            return existingPermission;
+        }
+
+        public async Task<Permission> UpdateAsync(Permission permission)
+        {
+            var existingPermission = await _context.Permissions.FindAsync(permission.PermissionId);
+            if (existingPermission == null)
+                return null;
+
+            _context.Entry(existingPermission).CurrentValues.SetValues(permission);
+            await _context.SaveChangesAsync();
+            return existingPermission;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var permission = await _context.Permissions.FindAsync(id);
+            if (permission == null)
+                return false;
+
+            _context.Permissions.Remove(permission);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IEnumerable<Permission>> GetAllAsync()
         {
             return await _context.Permissions.ToListAsync();
         }
-
-        public Task<Permission> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Permission> UpdateAsync(Permission permission)
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }

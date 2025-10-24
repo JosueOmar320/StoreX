@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using StoreX.Domain.Entities;
 using StoreX.Domain.Interfaces;
 
-
 namespace StoreX.Infrastructure.Persistence.Repositories
 {
     public class UserRoleRepository : IUserRoleRepository
@@ -26,24 +25,46 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return userRole;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<UserRole> GetByIdAsync(int userId, int roleId)
         {
-            throw new NotImplementedException();
+            var existing = await _context.UserRoles
+                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId);
+
+            if (existing == null)
+                return null;
+
+            return existing;
+        }
+
+        public async Task<UserRole> UpdateAsync(UserRole userRole)
+        {
+            var existing = await _context.UserRoles
+                .FirstOrDefaultAsync(ur => ur.UserId == userRole.UserId && ur.RoleId == userRole.RoleId);
+
+            if (existing == null)
+                return null;
+
+            _context.Entry(existing).CurrentValues.SetValues(userRole);
+            await _context.SaveChangesAsync();
+            return existing;
+        }
+
+        public async Task<bool> DeleteAsync(int userId, int roleId)
+        {
+            var existing = await _context.UserRoles
+                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId);
+
+            if (existing == null)
+                return false;
+
+            _context.UserRoles.Remove(existing);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IEnumerable<UserRole>> GetAllAsync()
         {
             return await _context.UserRoles.ToListAsync();
-        }
-
-        public Task<UserRole> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<UserRole> UpdateAsync(UserRole userRole)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -25,25 +25,40 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return purchaseOrder;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<PurchaseOrder> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var existingOrder = await _context.PurchaseOrders.FindAsync(id);
+            if (existingOrder == null)
+                return null;
+
+            return existingOrder;
+        }
+
+        public async Task<PurchaseOrder> UpdateAsync(PurchaseOrder purchaseOrder)
+        {
+            var existingOrder = await _context.PurchaseOrders.FindAsync(purchaseOrder.PurchaseOrderId);
+            if (existingOrder == null)
+                return null;
+
+            _context.Entry(existingOrder).CurrentValues.SetValues(purchaseOrder);
+            await _context.SaveChangesAsync();
+            return existingOrder;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+            if (purchaseOrder == null)
+                return false;
+
+            _context.PurchaseOrders.Remove(purchaseOrder);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IEnumerable<PurchaseOrder>> GetAllAsync()
         {
             return await _context.PurchaseOrders.ToListAsync();
         }
-
-        public Task<PurchaseOrder> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PurchaseOrder> UpdateAsync(PurchaseOrder purchaseOrder)
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }

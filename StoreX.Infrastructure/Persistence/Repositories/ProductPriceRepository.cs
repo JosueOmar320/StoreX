@@ -25,25 +25,40 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return productPrice;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<ProductPrice> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var existingProductPrice = await _context.ProductPrices.FindAsync(id);
+            if (existingProductPrice == null)
+                return null;
+
+            return existingProductPrice;
+        }
+
+        public async Task<ProductPrice> UpdateAsync(ProductPrice productPrice)
+        {
+            var existingProductPrice = await _context.ProductPrices.FindAsync(productPrice.ProductPriceId);
+            if (existingProductPrice == null)
+                return null;
+
+            _context.Entry(existingProductPrice).CurrentValues.SetValues(productPrice);
+            await _context.SaveChangesAsync();
+            return existingProductPrice;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var productPrice = await _context.ProductPrices.FindAsync(id);
+            if (productPrice == null)
+                return false;
+
+            _context.ProductPrices.Remove(productPrice);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IEnumerable<ProductPrice>> GetAllAsync()
         {
             return await _context.ProductPrices.ToListAsync();
         }
-
-        public Task<ProductPrice> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ProductPrice> UpdateAsync(ProductPrice productPrice)
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using StoreX.Domain.Entities;
 using StoreX.Domain.Interfaces;
+
 namespace StoreX.Infrastructure.Persistence.Repositories
 {
     public class RolePermissionRepository : IRolePermissionRepository
@@ -24,25 +25,46 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return rolePermission;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<RolePermission> GetByIdAsync(int roleId, int permissionId)
         {
-            throw new NotImplementedException();
+            var existing = await _context.RolePermissions
+                .FirstOrDefaultAsync(rp => rp.RoleId == roleId && rp.PermissionId == permissionId);
+
+            if (existing == null)
+                return null;
+
+            return existing;
+        }
+
+        public async Task<RolePermission> UpdateAsync(RolePermission rolePermission)
+        {
+            var existing = await _context.RolePermissions
+                .FirstOrDefaultAsync(rp => rp.RoleId == rolePermission.RoleId && rp.PermissionId == rolePermission.PermissionId);
+
+            if (existing == null)
+                return null;
+
+            _context.Entry(existing).CurrentValues.SetValues(rolePermission);
+            await _context.SaveChangesAsync();
+            return existing;
+        }
+
+        public async Task<bool> DeleteAsync(int roleId, int permissionId)
+        {
+            var existing = await _context.RolePermissions
+                .FirstOrDefaultAsync(rp => rp.RoleId == roleId && rp.PermissionId == permissionId);
+
+            if (existing == null)
+                return false;
+
+            _context.RolePermissions.Remove(existing);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IEnumerable<RolePermission>> GetAllAsync()
         {
             return await _context.RolePermissions.ToListAsync();
         }
-
-        public Task<RolePermission> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<RolePermission> UpdateAsync(RolePermission rolePermission)
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }
