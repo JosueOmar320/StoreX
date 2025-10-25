@@ -25,10 +25,31 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return brand;
         }
 
+        public async Task<Brand> GetByIdAsync(int id)
+        {
+            var existingBrand = await _context.Brands.FindAsync(id);
+            if (existingBrand == null)
+                return null;
+
+            return existingBrand;
+        }
+
+        public async Task<Brand> UpdateAsync(Brand brand)
+        {
+            var existingBrand = await _context.Brands.FindAsync(brand.BrandId);
+            if (existingBrand == null)
+                return null;
+
+            _context.Entry(existingBrand).CurrentValues.SetValues(brand);
+            await _context.SaveChangesAsync();
+            return existingBrand;
+        }
+
         public async Task<bool> DeleteAsync(int id)
         {
             var brand = await _context.Brands.FindAsync(id);
-            if (brand == null) return false;
+            if (brand == null) 
+                return false;
 
             _context.Brands.Remove(brand);
             await _context.SaveChangesAsync();
@@ -38,16 +59,6 @@ namespace StoreX.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<Brand>> GetAllAsync()
         {
             return await _context.Brands.ToListAsync();
-        }
-
-        public Task<Brand> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Brand> UpdateAsync(Brand brand)
-        {
-            throw new NotImplementedException();
         }
     }
 }
