@@ -9,10 +9,10 @@ namespace StoreX.Application.Interfaces
 {
     public interface ISupplierService
     {
-        Task<IEnumerable<Supplier>> GetAllAsync();
-        Task<Supplier> GetByIdAsync(int id);
-        Task<Supplier> AddAsync(Supplier supplier);
-        Task<Supplier> UpdateAsync(Supplier supplier);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<Supplier>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Supplier?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Supplier> AddAsync(Supplier supplier, CancellationToken cancellationToken = default);
+        Task<Supplier?> UpdateAsync(Supplier supplier, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }

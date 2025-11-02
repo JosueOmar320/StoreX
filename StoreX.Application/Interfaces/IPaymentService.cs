@@ -9,10 +9,10 @@ namespace StoreX.Application.Interfaces
 {
     public interface IPaymentService
     {
-        Task<IEnumerable<Payment>> GetAllAsync();
-        Task<Payment> GetByIdAsync(int id);
-        Task<Payment> AddAsync(Payment payment);
-        Task<Payment> UpdateAsync(Payment payment);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<Payment>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Payment?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Payment> AddAsync(Payment payment, CancellationToken cancellationToken = default);
+        Task<Payment?> UpdateAsync(Payment payment, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }

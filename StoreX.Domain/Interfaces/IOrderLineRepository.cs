@@ -9,10 +9,10 @@ namespace StoreX.Domain.Interfaces
 {
     public interface IOrderLineRepository
     {
-        Task<IEnumerable<OrderLine>> GetAllAsync();
-        Task<OrderLine> GetByIdAsync(int id);
-        Task<OrderLine> AddAsync(OrderLine orderLine);
-        Task<OrderLine> UpdateAsync(OrderLine orderLine);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<OrderLine>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<OrderLine?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<OrderLine> AddAsync(OrderLine orderLine, CancellationToken cancellationToken = default);
+        Task<OrderLine?> UpdateAsync(OrderLine orderLine, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }

@@ -9,10 +9,10 @@ namespace StoreX.Application.Interfaces
 {
     public interface ICashMovementService
     {
-        Task<IEnumerable<CashMovement>> GetAllAsync();
-        Task<CashMovement> GetByIdAsync(int id);
-        Task<CashMovement> AddAsync(CashMovement cashMovement);
-        Task<CashMovement> UpdateAsync(CashMovement cashMovement);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<CashMovement>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<CashMovement?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<CashMovement> AddAsync(CashMovement cashMovement, CancellationToken cancellationToken = default);
+        Task<CashMovement?> UpdateAsync(CashMovement cashMovement, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }

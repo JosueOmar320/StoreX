@@ -9,10 +9,10 @@ namespace StoreX.Domain.Interfaces
 {
     public interface ICashSessionRepository
     {
-        Task<IEnumerable<CashSession>> GetAllAsync();
-        Task<CashSession> GetByIdAsync(int id);
-        Task<CashSession> AddAsync(CashSession cashSession);
-        Task<CashSession> UpdateAsync(CashSession cashSession);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<CashSession>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<CashSession?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<CashSession> AddAsync(CashSession cashSession, CancellationToken cancellationToken = default);
+        Task<CashSession?> UpdateAsync(CashSession cashSession, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }

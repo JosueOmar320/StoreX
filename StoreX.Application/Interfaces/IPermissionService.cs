@@ -9,10 +9,10 @@ namespace StoreX.Application.Interfaces
 {
     public interface IPermissionService
     {
-        Task<IEnumerable<Permission>> GetAllAsync();
-        Task<Permission> GetByIdAsync(int id);
-        Task<Permission> AddAsync(Permission permission);
-        Task<Permission> UpdateAsync(Permission permission);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<Permission>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Permission?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Permission> AddAsync(Permission permission, CancellationToken cancellationToken = default);
+        Task<Permission?> UpdateAsync(Permission permission, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }

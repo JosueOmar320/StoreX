@@ -9,10 +9,11 @@ namespace StoreX.Domain.Interfaces
 {
     public interface IInventoryRepository
     {
-        Task<IEnumerable<Inventory>> GetAllAsync();
-        Task<Inventory> GetByIdAsync(int id);
-        Task<Inventory> AddAsync(Inventory inventory);
-        Task<Inventory> UpdateAsync(Inventory inventory);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<Inventory>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Inventory?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Inventory> AddAsync(Inventory inventory, CancellationToken cancellationToken = default);
+        Task<Inventory?> UpdateAsync(Inventory inventory, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
+
 }

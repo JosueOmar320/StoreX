@@ -18,47 +18,47 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<Brand> AddAsync(Brand brand)
+        public async Task<Brand> AddAsync(Brand brand, CancellationToken cancellationToken = default)
         {
-            await _context.Brands.AddAsync(brand);
-            await _context.SaveChangesAsync();
+            await _context.Brands.AddAsync(brand, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return brand;
         }
 
-        public async Task<Brand> GetByIdAsync(int id)
+        public async Task<Brand?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingBrand = await _context.Brands.FindAsync(id);
+            var existingBrand = await _context.Brands.FindAsync(id, cancellationToken);
             if (existingBrand == null)
                 return null;
 
             return existingBrand;
         }
 
-        public async Task<Brand> UpdateAsync(Brand brand)
+        public async Task<Brand?> UpdateAsync(Brand brand, CancellationToken cancellationToken = default)
         {
-            var existingBrand = await _context.Brands.FindAsync(brand.BrandId);
+            var existingBrand = await _context.Brands.FindAsync(brand.BrandId, cancellationToken);
             if (existingBrand == null)
                 return null;
 
             _context.Entry(existingBrand).CurrentValues.SetValues(brand);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return existingBrand;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var brand = await _context.Brands.FindAsync(id);
+            var brand = await _context.Brands.FindAsync(id, cancellationToken);
             if (brand == null) 
                 return false;
 
             _context.Brands.Remove(brand);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<Brand>> GetAllAsync()
+        public async Task<IEnumerable<Brand>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Brands.ToListAsync();
+            return await _context.Brands.ToListAsync(cancellationToken);
         }
     }
 }
