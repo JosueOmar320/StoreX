@@ -72,7 +72,7 @@ namespace StoreX.Api.Controllers
                 return NotFound($"No se encontró un producto con ID {id}");
 
             return Ok(updated);
-        }
+        } 
 
         // DELETE: api/Product/{id}
         [HttpDelete("{id:int}", Name = "DeleteProduct")]
