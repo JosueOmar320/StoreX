@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using StoreX.Application.Common.DependencyInjection;
+using StoreX.Application.DependencyInjection;
 using StoreX.Infrastructure.DependencyInjection;
 using StoreX.Infrastructure.Persistence;
 using System;

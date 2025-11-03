@@ -27,10 +27,10 @@ namespace StoreX.Application.Services
         public Task<IEnumerable<ProductCategory>> GetAllAsync(CancellationToken token = default)
             => _repo.GetAllAsync(token);
 
-        public Task<ProductCategory> GetByIdAsync(int id, CancellationToken token = default)
+        public Task<ProductCategory?> GetByIdAsync(int id, CancellationToken token = default)
             => _repo.GetByIdAsync(id, token);
 
-        public Task<ProductCategory> UpdateAsync(ProductCategory entity, CancellationToken token = default)
+        public Task<ProductCategory?> UpdateAsync(ProductCategory entity, CancellationToken token = default)
             => _repo.UpdateAsync(entity, token);
     }
 }

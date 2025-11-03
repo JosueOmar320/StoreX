@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using StoreX.Application.Common.Interfaces;
+using StoreX.Application.Interfaces;
 using StoreX.Domain.Entities;
-using System.Threading;
 
 namespace StoreX.Api.Controllers
 {
@@ -17,6 +16,7 @@ namespace StoreX.Api.Controllers
             _brandService = brandService;
         }
 
+        // GET: api/Brand
         [HttpGet(Name = "FetchAllBrand")]
         [ProducesResponseType(typeof(IEnumerable<Brand>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -24,65 +24,69 @@ namespace StoreX.Api.Controllers
         [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
         public async Task<IActionResult> FetchAllBrand(CancellationToken cancellationToken)
         {
-            //try
-            //{
-            //    //// Check if the request was cancelled
-            //if (cancellationToken.IsCancellationRequested)
-            //    return re;
-
-            var data = await _brandService.GetAllAsync();
-
-
-            //if (data == null)
-            //    return NotFound();
+            var data = await _brandService.GetAllAsync(cancellationToken);
+            if (data == null)
+                return NotFound();
 
             return Ok(data);
-            //}
-            //catch (OperationCanceledException)
-            //{
-            //    // The request was cancelled by the client
-            //    //return StatusCode(StatusCodes.Status499ClientClosedRequest);
-            //}
-            //catch (Exception ex)
-            //{
-            //    UnifiedLogger.LogError(ex, "Failed Fetch TenantUser By Id");
-            //    // Handle other exceptions
-            //    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            //}
         }
 
-        [HttpPost(Name = "CreateBrand")]
+        // GET: api/Brand/{id}
+        [HttpGet("{id:int}", Name = "GetBrandById")]
         [ProducesResponseType(typeof(Brand), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
-        public async Task<IActionResult> CreateBrand(Brand brand,CancellationToken cancellationToken)
+        public async Task<IActionResult> GetBrandById(int id, CancellationToken cancellationToken)
         {
-            //try
-            //{
-            //    //// Check if the request was cancelled
-            //if (cancellationToken.IsCancellationRequested)
-            //    return re;
+            var product = await _brandService.GetByIdAsync(id, cancellationToken);
+            if (product == null)
+                return NotFound($"No se encontró un brand con ID {id}");
 
-            var data = await _brandService.AddAsync(brand);
+            return Ok(product);
+        }
 
+        // POST: api/Brand
+        [HttpPost(Name = "CreateBrand")]
+        [ProducesResponseType(typeof(Brand), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
+        public async Task<IActionResult> CreateBrand(Brand brand, CancellationToken cancellationToken)
+        {
 
-            //if (data == null)
-            //    return NotFound();
+            var created = await _brandService.AddAsync(brand, cancellationToken);
+            return Ok(created);
+        }
 
-            return Ok(data);
-            //}
-            //catch (OperationCanceledException)
-            //{
-            //    // The request was cancelled by the client
-            //    //return StatusCode(StatusCodes.Status499ClientClosedRequest);
-            //}
-            //catch (Exception ex)
-            //{
-            //    UnifiedLogger.LogError(ex, "Failed Fetch TenantUser By Id");
-            //    // Handle other exceptions
-            //    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            //}
+        // PUT: api/Brand/{id}
+        [HttpPut("{id:int}", Name = "UpdateBrand")]
+        [ProducesResponseType(typeof(Brand), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
+        public async Task<IActionResult> UpdateBrand(int id, Brand brand, CancellationToken cancellationToken)
+        {
+            var updated = await _brandService.UpdateAsync(brand, cancellationToken);
+            if (updated == null)
+                return NotFound($"No se encontró un brand con ID {id}");
+
+            return Ok(updated);
+        }
+
+        // DELETE: api/Brand/{id}
+        [HttpDelete("{id:int}", Name = "DeleteBrand")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
+        public async Task<IActionResult> DeleteBrand(int id, CancellationToken cancellationToken)
+        {
+            var deleted = await _brandService.DeleteAsync(id, cancellationToken);
+            if (!deleted)
+                return NotFound($"No se encontró un brand con ID {id}");
+
+            return Ok(true);
         }
     }
 }
