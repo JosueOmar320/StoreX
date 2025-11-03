@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StoreX.Application.Common.Interfaces;
-using StoreX.Application.Common.Services;
+using StoreX.Application.Interfaces;
+using StoreX.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

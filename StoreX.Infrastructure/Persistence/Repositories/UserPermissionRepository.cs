@@ -30,16 +30,19 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return await _context.UserPermissions.FindAsync(id, cancellationToken);
         }
 
-        public async Task<UserPermission?> UpdateAsync(UserPermission entity, CancellationToken cancellationToken = default)
-        {
-            var existing = await _context.UserPermissions.FindAsync(entity.UserPermissionId, cancellationToken);
-            if (existing == null)
-                return null;
+        //public async Task<UserPermission?> UpdateAsync(UserPermission entity, CancellationToken cancellationToken = default)
+        //{
+        //    var existing = await _context.UserPermissions.FindAsync(entity.UserPermissionId, cancellationToken);
+        //    if (existing == null)
+        //        return null;
 
-            _context.Entry(existing).CurrentValues.SetValues(entity);
-            await _context.SaveChangesAsync(cancellationToken);
-            return existing;
-        }
+        //    _context.Entry(existing).CurrentValues.SetValues(entity);
+        //    await _context.SaveChangesAsync(cancellationToken);
+        //    return existing;
+        //}
+
+        public Task<UserPermission?> UpdateAsync(UserPermission entity, CancellationToken cancellationToken = default)
+            => throw new NotImplementedException();
 
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {

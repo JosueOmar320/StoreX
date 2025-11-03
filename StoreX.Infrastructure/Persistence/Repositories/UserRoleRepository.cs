@@ -30,16 +30,19 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             return await _context.UserRoles.FindAsync(id, cancellationToken);
         }
 
-        public async Task<UserRole?> UpdateAsync(UserRole entity, CancellationToken cancellationToken = default)
-        {
-            var existing = await _context.UserRoles.FindAsync(entity.UserRoleId, cancellationToken);
-            if (existing == null)
-                return null;
+        //public async Task<UserRole?> UpdateAsync(UserRole entity, CancellationToken cancellationToken = default)
+        //{
+        //    var existing = await _context.UserRoles.FindAsync(entity., cancellationToken);
+        //    if (existing == null)
+        //        return null;
 
-            _context.Entry(existing).CurrentValues.SetValues(entity);
-            await _context.SaveChangesAsync(cancellationToken);
-            return existing;
-        }
+        //    _context.Entry(existing).CurrentValues.SetValues(entity);
+        //    await _context.SaveChangesAsync(cancellationToken);
+        //    return existing;
+        //}
+
+        public Task<UserRole?> UpdateAsync(UserRole entity, CancellationToken cancellationToken = default)
+            => throw new NotImplementedException();
 
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using StoreX.Application.Common.Interfaces;
+using StoreX.Application.Interfaces;
 using StoreX.Domain.Entities;
 
 namespace StoreX.Api.Controllers
@@ -16,6 +16,7 @@ namespace StoreX.Api.Controllers
             _productService = productService;
         }
 
+        // GET: api/Product
         [HttpGet(Name = "FetchAllProduct")]
         [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -23,65 +24,69 @@ namespace StoreX.Api.Controllers
         [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
         public async Task<IActionResult> FetchAllProduct(CancellationToken cancellationToken)
         {
-            //try
-            //{
-            //    //// Check if the request was cancelled
-            //if (cancellationToken.IsCancellationRequested)
-            //    return re;
-
-            var data = await _productService.GetAllAsync();
-
-
-            //if (data == null)
-            //    return NotFound();
+            var data = await _productService.GetAllAsync(cancellationToken);
+            if (data == null)
+                return NotFound();
 
             return Ok(data);
-            //}
-            //catch (OperationCanceledException)
-            //{
-            //    // The request was cancelled by the client
-            //    //return StatusCode(StatusCodes.Status499ClientClosedRequest);
-            //}
-            //catch (Exception ex)
-            //{
-            //    UnifiedLogger.LogError(ex, "Failed Fetch TenantUser By Id");
-            //    // Handle other exceptions
-            //    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            //}
         }
 
-        [HttpPost(Name = "CreateProduct")]
-        [ProducesResponseType(typeof(Brand), StatusCodes.Status200OK)]
+        // GET: api/Product/{id}
+        [HttpGet("{id:int}", Name = "GetProductById")]
+        [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
+        public async Task<IActionResult> GetProductById(int id, CancellationToken cancellationToken)
+        {
+            var product = await _productService.GetByIdAsync(id, cancellationToken);
+            if (product == null)
+                return NotFound($"No se encontró un producto con ID {id}");
+
+            return Ok(product);
+        }
+
+        // POST: api/Product
+        [HttpPost(Name = "CreateProduct")]
+        [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
         public async Task<IActionResult> CreateProduct(Product product, CancellationToken cancellationToken)
         {
-            //try
-            //{
-            //    //// Check if the request was cancelled
-            //if (cancellationToken.IsCancellationRequested)
-            //    return re;
 
-            var data = await _productService.AddAsync(product);
+            var created = await _productService.AddAsync(product, cancellationToken);
+            return Ok(created);
+        }
 
+        // PUT: api/Product/{id}
+        [HttpPut("{id:int}", Name = "UpdateProduct")]
+        [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
+        public async Task<IActionResult> UpdateProduct(int id, Product product, CancellationToken cancellationToken)
+        {
+            var updated = await _productService.UpdateAsync(product, cancellationToken);
+            if (updated == null)
+                return NotFound($"No se encontró un producto con ID {id}");
 
-            //if (data == null)
-            //    return NotFound();
+            return Ok(updated);
+        }
 
-            return Ok(data);
-            //}
-            //catch (OperationCanceledException)
-            //{
-            //    // The request was cancelled by the client
-            //    //return StatusCode(StatusCodes.Status499ClientClosedRequest);
-            //}
-            //catch (Exception ex)
-            //{
-            //    UnifiedLogger.LogError(ex, "Failed Fetch TenantUser By Id");
-            //    // Handle other exceptions
-            //    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            //}
+        // DELETE: api/Product/{id}
+        [HttpDelete("{id:int}", Name = "DeleteProduct")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
+        public async Task<IActionResult> DeleteProduct(int id, CancellationToken cancellationToken)
+        {
+            var deleted = await _productService.DeleteAsync(id, cancellationToken);
+            if (!deleted)
+                return NotFound($"No se encontró un producto con ID {id}");
+
+            return Ok(true);
         }
     }
 }
