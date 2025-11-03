@@ -16,8 +16,17 @@ namespace StoreX.Infrastructure.DependencyInjection
             // Repositorios
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
-
-
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IMovementRepository, MovementRepository>();
+            services.AddScoped<IMovementLineRepository, MovementLineRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<IProductSupplierRepository, ProductSupplierRepository>();
+            services.AddScoped<ICashMovementRepository, CashMovementRepository>();
+            services.AddScoped<ICashSessionRepository, CashSessionRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderLineRepository, OrderLineRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
@@ -29,9 +38,6 @@ namespace StoreX.Infrastructure.DependencyInjection
             services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
             services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-
-            // Servicios externos o técnicos si tienes
-            // services.AddTransient<IEmailSender, EmailSender>();
 
             return services;
         }
