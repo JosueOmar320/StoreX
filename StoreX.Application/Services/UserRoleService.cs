@@ -19,14 +19,24 @@ namespace StoreX.Application.Services
         public Task<UserRole> AddAsync(UserRole userRole, CancellationToken cancellationToken = default)
             => _userRoleRepository.AddAsync(userRole, cancellationToken);
 
-        public Task<bool> DeleteAsync(int userId, int roleId, CancellationToken cancellationToken = default)
-            => _userRoleRepository.DeleteAsync(userId, roleId, cancellationToken);
+        public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public Task<bool> DeleteAsync(int userId, int roleId, CancellationToken cancellationToken = default)
+        //    => _userRoleRepository.DeleteAsync(userId, roleId, cancellationToken);
 
         public Task<IEnumerable<UserRole>> GetAllAsync(CancellationToken cancellationToken = default)
             => _userRoleRepository.GetAllAsync(cancellationToken);
 
-        public Task<UserRole?> GetByIdAsync(int userId, int roleId, CancellationToken cancellationToken = default)
-            => _userRoleRepository.GetByIdAsync(userId, roleId, cancellationToken);
+        public Task<UserRole?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public Task<UserRole?> GetByIdAsync(int userId, int roleId, CancellationToken cancellationToken = default)
+        //    => _userRoleRepository.GetByIdAsync(userId, roleId, cancellationToken);
 
         public Task<UserRole?> UpdateAsync(UserRole userRole, CancellationToken cancellationToken = default)
             => _userRoleRepository.UpdateAsync(userRole, cancellationToken);
