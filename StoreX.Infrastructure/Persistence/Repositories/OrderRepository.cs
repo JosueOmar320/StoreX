@@ -18,47 +18,44 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<Order> AddAsync(Order order)
+        public async Task<Order> AddAsync(Order entity, CancellationToken cancellationToken = default)
         {
-            await _context.Orders.AddAsync(order);
-            await _context.SaveChangesAsync();
-            return order;
+            await _context.Orders.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
         }
 
-        public async Task<Order> GetByIdAsync(int id)
+        public async Task<Order?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingOrder = await _context.Orders.FindAsync(id);
-            if (existingOrder == null)
+            return await _context.Orders.FindAsync(id, cancellationToken);
+        }
+
+        public async Task<Order?> UpdateAsync(Order entity, CancellationToken cancellationToken = default)
+        {
+            var existing = await _context.Orders.FindAsync(entity.OrderId, cancellationToken);
+            if (existing == null)
                 return null;
 
-            return existingOrder;
+            _context.Entry(existing).CurrentValues.SetValues(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+            return existing;
         }
 
-        public async Task<Order> UpdateAsync(Order order)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingOrder = await _context.Orders.FindAsync(order.OrderId);
-            if (existingOrder == null)
-                return null;
-
-            _context.Entry(existingOrder).CurrentValues.SetValues(order);
-            await _context.SaveChangesAsync();
-            return existingOrder;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
+            var entity = await _context.Orders.FindAsync(id, cancellationToken);
+            if (entity == null)
                 return false;
 
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
+            _context.Orders.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<Order>> GetAllAsync()
+        public async Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders.ToListAsync(cancellationToken);
         }
     }
+
 }

@@ -18,43 +18,43 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<Movement> AddAsync(Movement movement)
+        public async Task<Movement> AddAsync(Movement movement, CancellationToken cancellationToken = default)
         {
-            await _context.Movements.AddAsync(movement);
-            await _context.SaveChangesAsync();
+            await _context.Movements.AddAsync(movement, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return movement;
         }
 
-        public async Task<Movement> GetByIdAsync(int id)
+        public async Task<Movement?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await _context.Movements.FindAsync(id);
+            return await _context.Movements.FindAsync(id, cancellationToken);
         }
 
-        public async Task<Movement> UpdateAsync(Movement movement)
+        public async Task<Movement?> UpdateAsync(Movement movement, CancellationToken cancellationToken = default)
         {
-            var existing = await _context.Movements.FindAsync(movement.MovementId);
+            var existing = await _context.Movements.FindAsync(movement.MovementId, cancellationToken);
             if (existing == null)
                 return null;
 
             _context.Entry(existing).CurrentValues.SetValues(movement);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return existing;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.Movements.FindAsync(id);
+            var entity = await _context.Movements.FindAsync(id, cancellationToken);
             if (entity == null)
                 return false;
 
             _context.Movements.Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<Movement>> GetAllAsync()
+        public async Task<IEnumerable<Movement>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Movements.ToListAsync();
+            return await _context.Movements.ToListAsync(cancellationToken);
         }
     }
 }

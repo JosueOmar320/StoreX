@@ -18,43 +18,43 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<ProductSupplier> AddAsync(ProductSupplier entity)
+        public async Task<ProductSupplier> AddAsync(ProductSupplier entity, CancellationToken cancellationToken = default)
         {
-            await _context.ProductSuppliers.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await _context.ProductSuppliers.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return entity;
         }
 
-        public async Task<ProductSupplier> GetByIdAsync(int id)
+        public async Task<ProductSupplier?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await _context.ProductSuppliers.FindAsync(id);
+            return await _context.ProductSuppliers.FindAsync(id, cancellationToken);
         }
 
-        public async Task<ProductSupplier> UpdateAsync(ProductSupplier entity)
+        public async Task<ProductSupplier?> UpdateAsync(ProductSupplier entity, CancellationToken cancellationToken = default)
         {
-            var existing = await _context.ProductSuppliers.FindAsync(entity.ProductSupplierId);
+            var existing = await _context.ProductSuppliers.FindAsync(entity.ProductSupplierId, cancellationToken);
             if (existing == null)
                 return null;
 
             _context.Entry(existing).CurrentValues.SetValues(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return existing;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.ProductSuppliers.FindAsync(id);
+            var entity = await _context.ProductSuppliers.FindAsync(id, cancellationToken);
             if (entity == null)
                 return false;
 
             _context.ProductSuppliers.Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<ProductSupplier>> GetAllAsync()
+        public async Task<IEnumerable<ProductSupplier>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.ProductSuppliers.ToListAsync();
+            return await _context.ProductSuppliers.ToListAsync(cancellationToken);
         }
     }
 

@@ -18,53 +18,43 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<UserRole> AddAsync(UserRole userRole)
+        public async Task<UserRole> AddAsync(UserRole entity, CancellationToken cancellationToken = default)
         {
-            await _context.UserRoles.AddAsync(userRole);
-            await _context.SaveChangesAsync();
-            return userRole;
+            await _context.UserRoles.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
         }
 
-        public async Task<UserRole> GetByIdAsync(int userId, int roleId)
+        public async Task<UserRole?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existing = await _context.UserRoles
-                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId);
+            return await _context.UserRoles.FindAsync(id, cancellationToken);
+        }
 
+        public async Task<UserRole?> UpdateAsync(UserRole entity, CancellationToken cancellationToken = default)
+        {
+            var existing = await _context.UserRoles.FindAsync(entity.UserRoleId, cancellationToken);
             if (existing == null)
                 return null;
 
+            _context.Entry(existing).CurrentValues.SetValues(entity);
+            await _context.SaveChangesAsync(cancellationToken);
             return existing;
         }
 
-        public async Task<UserRole> UpdateAsync(UserRole userRole)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existing = await _context.UserRoles
-                .FirstOrDefaultAsync(ur => ur.UserId == userRole.UserId && ur.RoleId == userRole.RoleId);
-
-            if (existing == null)
-                return null;
-
-            _context.Entry(existing).CurrentValues.SetValues(userRole);
-            await _context.SaveChangesAsync();
-            return existing;
-        }
-
-        public async Task<bool> DeleteAsync(int userId, int roleId)
-        {
-            var existing = await _context.UserRoles
-                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId);
-
-            if (existing == null)
+            var entity = await _context.UserRoles.FindAsync(id, cancellationToken);
+            if (entity == null)
                 return false;
 
-            _context.UserRoles.Remove(existing);
-            await _context.SaveChangesAsync();
+            _context.UserRoles.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<UserRole>> GetAllAsync()
+        public async Task<IEnumerable<UserRole>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.UserRoles.ToListAsync();
+            return await _context.UserRoles.ToListAsync(cancellationToken);
         }
     }
 }

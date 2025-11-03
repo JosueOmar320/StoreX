@@ -18,43 +18,44 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<CashMovement> AddAsync(CashMovement entity)
+        public async Task<CashMovement> AddAsync(CashMovement entity, CancellationToken cancellationToken = default)
         {
-            await _context.CashMovements.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await _context.CashMovements.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return entity;
         }
 
-        public async Task<CashMovement> GetByIdAsync(int id)
+        public async Task<CashMovement?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await _context.CashMovements.FindAsync(id);
+            return await _context.CashMovements.FindAsync(id, cancellationToken);
         }
 
-        public async Task<CashMovement> UpdateAsync(CashMovement entity)
+        public async Task<CashMovement?> UpdateAsync(CashMovement entity, CancellationToken cancellationToken = default)
         {
-            var existing = await _context.CashMovements.FindAsync(entity.CashMovementId);
+            var existing = await _context.CashMovements.FindAsync(entity.CashMovementId, cancellationToken);
             if (existing == null)
                 return null;
 
             _context.Entry(existing).CurrentValues.SetValues(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return existing;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.CashMovements.FindAsync(id);
+            var entity = await _context.CashMovements.FindAsync(id, cancellationToken);
             if (entity == null)
                 return false;
 
             _context.CashMovements.Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<CashMovement>> GetAllAsync()
+        public async Task<IEnumerable<CashMovement>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.CashMovements.ToListAsync();
+            return await _context.CashMovements.ToListAsync(cancellationToken);
         }
     }
+
 }

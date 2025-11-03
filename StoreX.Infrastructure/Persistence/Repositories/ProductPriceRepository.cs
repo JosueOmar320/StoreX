@@ -18,47 +18,43 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<ProductPrice> AddAsync(ProductPrice productPrice)
+        public async Task<ProductPrice> AddAsync(ProductPrice entity, CancellationToken cancellationToken = default)
         {
-            await _context.ProductPrices.AddAsync(productPrice);
-            await _context.SaveChangesAsync();
-            return productPrice;
+            await _context.ProductPrices.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
         }
 
-        public async Task<ProductPrice> GetByIdAsync(int id)
+        public async Task<ProductPrice?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingProductPrice = await _context.ProductPrices.FindAsync(id);
-            if (existingProductPrice == null)
+            return await _context.ProductPrices.FindAsync(id, cancellationToken);
+        }
+
+        public async Task<ProductPrice?> UpdateAsync(ProductPrice entity, CancellationToken cancellationToken = default)
+        {
+            var existing = await _context.ProductPrices.FindAsync(entity.ProductPriceId, cancellationToken);
+            if (existing == null)
                 return null;
 
-            return existingProductPrice;
+            _context.Entry(existing).CurrentValues.SetValues(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+            return existing;
         }
 
-        public async Task<ProductPrice> UpdateAsync(ProductPrice productPrice)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingProductPrice = await _context.ProductPrices.FindAsync(productPrice.ProductPriceId);
-            if (existingProductPrice == null)
-                return null;
-
-            _context.Entry(existingProductPrice).CurrentValues.SetValues(productPrice);
-            await _context.SaveChangesAsync();
-            return existingProductPrice;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var productPrice = await _context.ProductPrices.FindAsync(id);
-            if (productPrice == null)
+            var entity = await _context.ProductPrices.FindAsync(id, cancellationToken);
+            if (entity == null)
                 return false;
 
-            _context.ProductPrices.Remove(productPrice);
-            await _context.SaveChangesAsync();
+            _context.ProductPrices.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<ProductPrice>> GetAllAsync()
+        public async Task<IEnumerable<ProductPrice>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.ProductPrices.ToListAsync();
+            return await _context.ProductPrices.ToListAsync(cancellationToken);
         }
     }
 }

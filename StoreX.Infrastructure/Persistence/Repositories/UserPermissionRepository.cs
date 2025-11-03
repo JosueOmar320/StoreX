@@ -18,53 +18,44 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<UserPermission> AddAsync(UserPermission userPermission)
+        public async Task<UserPermission> AddAsync(UserPermission entity, CancellationToken cancellationToken = default)
         {
-            await _context.UserPermissions.AddAsync(userPermission);
-            await _context.SaveChangesAsync();
-            return userPermission;
+            await _context.UserPermissions.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
         }
 
-        public async Task<UserPermission> GetByIdAsync(int userId, int permissionId)
+        public async Task<UserPermission?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existing = await _context.UserPermissions
-                .FirstOrDefaultAsync(up => up.UserId == userId && up.PermissionId == permissionId);
+            return await _context.UserPermissions.FindAsync(id, cancellationToken);
+        }
 
+        public async Task<UserPermission?> UpdateAsync(UserPermission entity, CancellationToken cancellationToken = default)
+        {
+            var existing = await _context.UserPermissions.FindAsync(entity.UserPermissionId, cancellationToken);
             if (existing == null)
                 return null;
 
+            _context.Entry(existing).CurrentValues.SetValues(entity);
+            await _context.SaveChangesAsync(cancellationToken);
             return existing;
         }
 
-        public async Task<UserPermission> UpdateAsync(UserPermission userPermission)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existing = await _context.UserPermissions
-                .FirstOrDefaultAsync(up => up.UserId == userPermission.UserId && up.PermissionId == userPermission.PermissionId);
-
-            if (existing == null)
-                return null;
-
-            _context.Entry(existing).CurrentValues.SetValues(userPermission);
-            await _context.SaveChangesAsync();
-            return existing;
-        }
-
-        public async Task<bool> DeleteAsync(int userId, int permissionId)
-        {
-            var existing = await _context.UserPermissions
-                .FirstOrDefaultAsync(up => up.UserId == userId && up.PermissionId == permissionId);
-
-            if (existing == null)
+            var entity = await _context.UserPermissions.FindAsync(id, cancellationToken);
+            if (entity == null)
                 return false;
 
-            _context.UserPermissions.Remove(existing);
-            await _context.SaveChangesAsync();
+            _context.UserPermissions.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<UserPermission>> GetAllAsync()
+        public async Task<IEnumerable<UserPermission>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.UserPermissions.ToListAsync();
+            return await _context.UserPermissions.ToListAsync(cancellationToken);
         }
     }
+
 }
