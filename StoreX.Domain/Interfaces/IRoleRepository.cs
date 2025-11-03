@@ -9,10 +9,10 @@ namespace StoreX.Domain.Interfaces
 {
     public interface IRoleRepository
     {
-        Task<IEnumerable<Role>> GetAllAsync();
-        Task<Role> GetByIdAsync(int id);
-        Task<Role> AddAsync(Role role);
-        Task<Role> UpdateAsync(Role role);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<Role>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Role?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Role> AddAsync(Role role, CancellationToken cancellationToken = default);
+        Task<Role?> UpdateAsync(Role role, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }

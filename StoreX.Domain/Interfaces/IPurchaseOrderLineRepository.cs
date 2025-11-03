@@ -9,10 +9,11 @@ namespace StoreX.Domain.Interfaces
 {
     public interface IPurchaseOrderLineRepository
     {
-        Task<IEnumerable<PurchaseOrderLine>> GetAllAsync();
-        Task<PurchaseOrderLine> GetByIdAsync(int id);
-        Task<PurchaseOrderLine> AddAsync(PurchaseOrderLine purchaseOrderLine);
-        Task<PurchaseOrderLine> UpdateAsync(PurchaseOrderLine purchaseOrderLine);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<PurchaseOrderLine>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<PurchaseOrderLine?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<PurchaseOrderLine> AddAsync(PurchaseOrderLine purchaseOrderLine, CancellationToken cancellationToken = default);
+        Task<PurchaseOrderLine?> UpdateAsync(PurchaseOrderLine purchaseOrderLine, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
+
 }

@@ -18,47 +18,43 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<OrderLine> AddAsync(OrderLine orderLine)
+        public async Task<OrderLine> AddAsync(OrderLine entity, CancellationToken cancellationToken = default)
         {
-            await _context.OrderLines.AddAsync(orderLine);
-            await _context.SaveChangesAsync();
-            return orderLine;
+            await _context.OrderLines.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
         }
 
-        public async Task<OrderLine> GetByIdAsync(int id)
+        public async Task<OrderLine?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingOrderLine = await _context.OrderLines.FindAsync(id);
-            if (existingOrderLine == null)
+            return await _context.OrderLines.FindAsync(id, cancellationToken);
+        }
+
+        public async Task<OrderLine?> UpdateAsync(OrderLine entity, CancellationToken cancellationToken = default)
+        {
+            var existing = await _context.OrderLines.FindAsync(entity.OrderLineId, cancellationToken);
+            if (existing == null)
                 return null;
 
-            return existingOrderLine;
+            _context.Entry(existing).CurrentValues.SetValues(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+            return existing;
         }
 
-        public async Task<OrderLine> UpdateAsync(OrderLine orderLine)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingOrderLine = await _context.OrderLines.FindAsync(orderLine.OrderLineId);
-            if (existingOrderLine == null)
-                return null;
-
-            _context.Entry(existingOrderLine).CurrentValues.SetValues(orderLine);
-            await _context.SaveChangesAsync();
-            return existingOrderLine;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var orderLine = await _context.OrderLines.FindAsync(id);
-            if (orderLine == null)
+            var entity = await _context.OrderLines.FindAsync(id, cancellationToken);
+            if (entity == null)
                 return false;
 
-            _context.OrderLines.Remove(orderLine);
-            await _context.SaveChangesAsync();
+            _context.OrderLines.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<OrderLine>> GetAllAsync()
+        public async Task<IEnumerable<OrderLine>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.OrderLines.ToListAsync();
+            return await _context.OrderLines.ToListAsync(cancellationToken);
         }
     }
 }

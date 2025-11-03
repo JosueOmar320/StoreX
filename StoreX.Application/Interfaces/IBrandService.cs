@@ -9,10 +9,10 @@ namespace StoreX.Application.Interfaces
 {
     public interface IBrandService
     {
-        Task<IEnumerable<Brand>> GetAllAsync();
-        Task<Brand> GetByIdAsync(int id);
-        Task<Brand> AddAsync(Brand brand);
-        Task<Brand> UpdateAsync(Brand brand);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<Brand>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Brand?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Brand> AddAsync(Brand brand, CancellationToken cancellationToken = default);
+        Task<Brand?> UpdateAsync(Brand brand, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }

@@ -18,43 +18,43 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<MovementLine> AddAsync(MovementLine entity)
+        public async Task<MovementLine> AddAsync(MovementLine entity, CancellationToken cancellationToken = default)
         {
-            await _context.MovementLines.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await _context.MovementLines.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return entity;
         }
 
-        public async Task<MovementLine> GetByIdAsync(int id)
+        public async Task<MovementLine?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await _context.MovementLines.FindAsync(id);
+            return await _context.MovementLines.FindAsync(id, cancellationToken);
         }
 
-        public async Task<MovementLine> UpdateAsync(MovementLine entity)
+        public async Task<MovementLine?> UpdateAsync(MovementLine entity, CancellationToken cancellationToken = default)
         {
-            var existing = await _context.MovementLines.FindAsync(entity.MovementLineId);
+            var existing = await _context.MovementLines.FindAsync(entity.MovementLineId, cancellationToken);
             if (existing == null)
                 return null;
 
             _context.Entry(existing).CurrentValues.SetValues(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return existing;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.MovementLines.FindAsync(id);
+            var entity = await _context.MovementLines.FindAsync(id, cancellationToken);
             if (entity == null)
                 return false;
 
             _context.MovementLines.Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<MovementLine>> GetAllAsync()
+        public async Task<IEnumerable<MovementLine>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.MovementLines.ToListAsync();
+            return await _context.MovementLines.ToListAsync(cancellationToken);
         }
     }
 }

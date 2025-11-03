@@ -18,39 +18,44 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<Payment> AddAsync(Payment payment)
+        public async Task<Payment> AddAsync(Payment entity, CancellationToken cancellationToken = default)
         {
-            await _context.Payments.AddAsync(payment);
-            await _context.SaveChangesAsync();
-            return payment;
+            await _context.Payments.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
         }
 
-        public async Task<Payment> GetByIdAsync(int id)
+        public async Task<Payment?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingPayment = await _context.Payments.FindAsync(id);
-            if (existingPayment == null)
+            return await _context.Payments.FindAsync(id, cancellationToken);
+        }
+
+        public async Task<Payment?> UpdateAsync(Payment entity, CancellationToken cancellationToken = default)
+        {
+            var existing = await _context.Payments.FindAsync(entity.PaymentId, cancellationToken);
+            if (existing == null)
                 return null;
 
-            return existingPayment;
+            _context.Entry(existing).CurrentValues.SetValues(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+            return existing;
         }
 
-        public async Task<Payment> UpdateAsync(Payment payment)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingPayment = await _context.Payments.FindAsync(payment.PaymentId);
-            if (existingPayment == null)
-                return null;
-
-            _context.Entry(existingPayment).CurrentValues.SetValues(payment);
-            await _context.SaveChangesAsync();
-            return existingPayment;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var payment = await _context.Payments.FindAsync(id);
-            if (payment == null)
+            var entity = await _context.Payments.FindAsync(id, cancellationToken);
+            if (entity == null)
                 return false;
 
-            _context.Payments.Remove(payment);
-            await _context.SaveChangesAsync();
+            _context.Payments.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
+        }
+
+        public async Task<IEnumerable<Payment>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.Payments.ToListAsync(cancellationToken);
+        }
+    }
+
+}

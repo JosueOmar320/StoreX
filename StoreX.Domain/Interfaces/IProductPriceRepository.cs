@@ -10,11 +10,11 @@ namespace StoreX.Domain.Interfaces
 {
     public interface IProductPriceRepository
     {
-        Task<IEnumerable<ProductPrice>> GetAllAsync();
-        Task<ProductPrice> GetByIdAsync(int id);
-        Task<ProductPrice> AddAsync(ProductPrice productPrice);
-        Task<ProductPrice> UpdateAsync(ProductPrice productPrice);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<ProductPrice>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<ProductPrice?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<ProductPrice> AddAsync(ProductPrice productPrice, CancellationToken cancellationToken = default);
+        Task<ProductPrice?> UpdateAsync(ProductPrice productPrice, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 
 }

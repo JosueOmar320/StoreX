@@ -18,43 +18,43 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<Inventory> AddAsync(Inventory entity)
+        public async Task<Inventory> AddAsync(Inventory entity, CancellationToken cancellationToken = default)
         {
-            await _context.Inventories.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await _context.Inventories.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return entity;
         }
 
-        public async Task<Inventory> GetByIdAsync(int id)
+        public async Task<Inventory?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await _context.Inventories.FindAsync(id);
+            return await _context.Inventories.FindAsync(id, cancellationToken);
         }
 
-        public async Task<Inventory> UpdateAsync(Inventory entity)
+        public async Task<Inventory?> UpdateAsync(Inventory entity, CancellationToken cancellationToken = default)
         {
-            var existing = await _context.Inventories.FindAsync(entity.InventoryId);
+            var existing = await _context.Inventories.FindAsync(entity.InventoryId, cancellationToken);
             if (existing == null)
                 return null;
 
             _context.Entry(existing).CurrentValues.SetValues(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return existing;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.Inventories.FindAsync(id);
+            var entity = await _context.Inventories.FindAsync(id, cancellationToken);
             if (entity == null)
                 return false;
 
             _context.Inventories.Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<Inventory>> GetAllAsync()
+        public async Task<IEnumerable<Inventory>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Inventories.ToListAsync();
+            return await _context.Inventories.ToListAsync(cancellationToken);
         }
     }
 }

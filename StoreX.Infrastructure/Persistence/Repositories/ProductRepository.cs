@@ -18,47 +18,47 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<Product> AddAsync(Product product)
+        public async Task<Product> AddAsync(Product product, CancellationToken cancellationToken = default)
         {
-            await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
+            await _context.Products.AddAsync(product, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return product;
         }
 
-        public async Task<Product> GetByIdAsync(int id)
+        public async Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingProduct = await _context.Products.FindAsync(id);
+            var existingProduct = await _context.Products.FindAsync(id, cancellationToken);
             if (existingProduct == null)
                 return null;
 
             return existingProduct;
         }
 
-        public async Task<Product> UpdateAsync(Product product)
+        public async Task<Product?> UpdateAsync(Product product, CancellationToken cancellationToken = default)
         {
-            var existingProduct = await _context.Products.FindAsync(product.ProductId);
+            var existingProduct = await _context.Products.FindAsync(product.ProductId, cancellationToken);
             if (existingProduct == null)
                 return null;
 
             _context.Entry(existingProduct).CurrentValues.SetValues(product);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return existingProduct;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products.FindAsync(id, cancellationToken);
             if (product == null)
                 return false;
 
             _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products.ToListAsync(cancellationToken);
         }
     }
 }

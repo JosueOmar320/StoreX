@@ -9,11 +9,11 @@ namespace StoreX.Domain.Interfaces
 {
     public interface IMovementLineRepository
     {
-        Task<IEnumerable<MovementLine>> GetAllAsync();
-        Task<MovementLine> GetByIdAsync(int id);
-        Task<MovementLine> AddAsync(MovementLine movementLine);
-        Task<MovementLine> UpdateAsync(MovementLine movementLine);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<MovementLine>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<MovementLine?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<MovementLine> AddAsync(MovementLine movementLine, CancellationToken cancellationToken = default);
+        Task<MovementLine?> UpdateAsync(MovementLine movementLine, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 
 }

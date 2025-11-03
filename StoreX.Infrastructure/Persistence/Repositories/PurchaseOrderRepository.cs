@@ -18,47 +18,44 @@ namespace StoreX.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<PurchaseOrder> AddAsync(PurchaseOrder purchaseOrder)
+        public async Task<PurchaseOrder> AddAsync(PurchaseOrder entity, CancellationToken cancellationToken = default)
         {
-            await _context.PurchaseOrders.AddAsync(purchaseOrder);
-            await _context.SaveChangesAsync();
-            return purchaseOrder;
+            await _context.PurchaseOrders.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
         }
 
-        public async Task<PurchaseOrder> GetByIdAsync(int id)
+        public async Task<PurchaseOrder?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingOrder = await _context.PurchaseOrders.FindAsync(id);
-            if (existingOrder == null)
+            return await _context.PurchaseOrders.FindAsync(id, cancellationToken);
+        }
+
+        public async Task<PurchaseOrder?> UpdateAsync(PurchaseOrder entity, CancellationToken cancellationToken = default)
+        {
+            var existing = await _context.PurchaseOrders.FindAsync(entity.PurchaseOrderId, cancellationToken);
+            if (existing == null)
                 return null;
 
-            return existingOrder;
+            _context.Entry(existing).CurrentValues.SetValues(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+            return existing;
         }
 
-        public async Task<PurchaseOrder> UpdateAsync(PurchaseOrder purchaseOrder)
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existingOrder = await _context.PurchaseOrders.FindAsync(purchaseOrder.PurchaseOrderId);
-            if (existingOrder == null)
-                return null;
-
-            _context.Entry(existingOrder).CurrentValues.SetValues(purchaseOrder);
-            await _context.SaveChangesAsync();
-            return existingOrder;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
-            if (purchaseOrder == null)
+            var entity = await _context.PurchaseOrders.FindAsync(id, cancellationToken);
+            if (entity == null)
                 return false;
 
-            _context.PurchaseOrders.Remove(purchaseOrder);
-            await _context.SaveChangesAsync();
+            _context.PurchaseOrders.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<PurchaseOrder>> GetAllAsync()
+        public async Task<IEnumerable<PurchaseOrder>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.PurchaseOrders.ToListAsync();
+            return await _context.PurchaseOrders.ToListAsync(cancellationToken);
         }
     }
+
 }

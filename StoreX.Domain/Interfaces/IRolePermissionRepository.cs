@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StoreX.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,10 @@ namespace StoreX.Domain.Interfaces
 {
     public interface IRolePermissionRepository
     {
-        Task<IEnumerable<RolePermission>> GetAllAsync();
-        Task<RolePermission> GetByIdAsync(int id);
-        Task<RolePermission> AddAsync(RolePermission rolePermission);
-        Task<RolePermission> UpdateAsync(RolePermission rolePermission);
-        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<RolePermission>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<RolePermission?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<RolePermission> AddAsync(RolePermission rolePermission, CancellationToken cancellationToken = default);
+        Task<RolePermission?> UpdateAsync(RolePermission rolePermission, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }
