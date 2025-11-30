@@ -56,5 +56,10 @@ namespace StoreX.Infrastructure.Persistence.Repositories
         {
             return await _context.Inventories.ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<Inventory>> GetAllPopulateAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.Inventories.Include(x => x.Product).ToListAsync(cancellationToken);
+        }
     }
 }

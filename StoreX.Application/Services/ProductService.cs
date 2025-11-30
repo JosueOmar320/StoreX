@@ -1,4 +1,5 @@
-﻿using StoreX.Application.Interfaces;
+﻿using StoreX.Application.Dtos;
+using StoreX.Application.Interfaces;
 using StoreX.Domain.Entities;
 using StoreX.Domain.Interfaces;
 using System;
@@ -31,5 +32,18 @@ namespace StoreX.Application.Services
 
         public Task<Product?> UpdateAsync(Product product, CancellationToken cancellationToken = default)
             => _productRepository.UpdateAsync(product, cancellationToken);
+        public async Task<IEnumerable<ProductDto>> GetAllPopulateAsync(CancellationToken cancellationToken = default)
+        {
+            var products = await _productRepository.GetAllPopulateAsync(cancellationToken);
+
+            var productsDto = products.Select(x => new ProductDto()
+            {
+                BrandName = x.Brand.Name,
+                ProductId = x.ProductId,
+                Name = x.Name
+            });
+
+            return productsDto;
+        }
     }
 }

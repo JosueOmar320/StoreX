@@ -14,6 +14,8 @@ namespace StoreX.Domain.Interfaces
         Task<Inventory> AddAsync(Inventory inventory, CancellationToken cancellationToken = default);
         Task<Inventory?> UpdateAsync(Inventory inventory, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<Inventory>> GetAllPopulateAsync(CancellationToken cancellationToken = default);
     }
 
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreX.Application.Dtos;
 using StoreX.Application.Interfaces;
+using StoreX.Application.Services;
 using StoreX.Domain.Entities;
 
 namespace StoreX.Api.Controllers
@@ -67,6 +69,7 @@ namespace StoreX.Api.Controllers
         [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
         public async Task<IActionResult> UpdateProduct(int id, Product product, CancellationToken cancellationToken)
         {
+            product.ProductId = id;
             var updated = await _productService.UpdateAsync(product, cancellationToken);
             if (updated == null)
                 return NotFound($"No se encontró un producto con ID {id}");
@@ -87,6 +90,20 @@ namespace StoreX.Api.Controllers
                 return NotFound($"No se encontró un producto con ID {id}");
 
             return Ok(true);
+        }
+
+        [HttpGet("populate", Name = "FetchAllProductPopulate")]
+        [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
+        public async Task<IActionResult> FetchAllInventoryPopulate(CancellationToken cancellationToken)
+        {
+            var data = await _productService.GetAllPopulateAsync(cancellationToken);
+            if (data == null)
+                return NotFound();
+
+            return Ok(data);
         }
     }
 }

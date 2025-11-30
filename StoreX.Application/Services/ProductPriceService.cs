@@ -1,3 +1,4 @@
+using StoreX.Application.Dtos;
 using StoreX.Application.Interfaces;
 using StoreX.Domain.Entities;
 using StoreX.Domain.Interfaces;
@@ -30,5 +31,22 @@ namespace StoreX.Application.Services
 
         public Task<ProductPrice?> UpdateAsync(ProductPrice productPrice, CancellationToken cancellationToken = default)
             => _productPriceRepository.UpdateAsync(productPrice, cancellationToken);
+
+        public async Task<IEnumerable<ProductPriceDto>> GetAllPopulateAsync(CancellationToken cancellationToken = default)
+        {
+            var productPrices = await _productPriceRepository.GetAllPopulateAsync(cancellationToken);
+
+            var productPricesDto = productPrices.Select(x => new ProductPriceDto()
+            {
+                Price = x.Price,
+                ProductId = x.ProductId,
+                EndDate = x.EndDate,
+                ProductName = x.Product.Name,
+                ProductPriceId = x.ProductPriceId,
+                StartDate = x.StartDate
+            });
+
+            return productPricesDto;
+        }
     }
 }

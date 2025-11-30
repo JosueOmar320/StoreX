@@ -1,4 +1,5 @@
-﻿using StoreX.Application.Interfaces;
+﻿using StoreX.Application.Dtos;
+using StoreX.Application.Interfaces;
 using StoreX.Domain.Entities;
 using StoreX.Domain.Interfaces;
 using System;
@@ -32,5 +33,23 @@ namespace StoreX.Application.Services
 
         public Task<Inventory?> UpdateAsync(Inventory entity, CancellationToken token = default)
             => _repo.UpdateAsync(entity, token);
+
+        public async Task<IEnumerable<InventoryDto>> GetAllPopulateAsync(CancellationToken cancellationToken = default)
+        {
+            var inventoryList = await _repo.GetAllPopulateAsync(cancellationToken);
+
+            var inventoryDtoList = inventoryList.Select(x => new InventoryDto()
+            {
+                AverageCost = x.AverageCost,
+                InventoryId = x.InventoryId,
+                LastUpdate = x.LastUpdate,
+                ProductId = x.ProductId,
+                ProductName = x.Product.Name,
+                QuantityAvailable = x.QuantityAvailable,
+                QuantityReserverd = x.QuantityReserverd
+            });
+
+            return inventoryDtoList;
+        }
     }
 }

@@ -67,6 +67,7 @@ namespace StoreX.Api.Controllers
         [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
         public async Task<IActionResult> UpdateBrand(int id, Brand brand, CancellationToken cancellationToken)
         {
+            brand.BrandId = id;
             var updated = await _brandService.UpdateAsync(brand, cancellationToken);
             if (updated == null)
                 return NotFound($"No se encontró un brand con ID {id}");

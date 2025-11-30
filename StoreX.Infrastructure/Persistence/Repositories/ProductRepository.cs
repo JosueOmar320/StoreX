@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using StoreX.Application.Dtos;
 using StoreX.Domain.Entities;
 using StoreX.Domain.Interfaces;
 
@@ -60,5 +61,11 @@ namespace StoreX.Infrastructure.Persistence.Repositories
         {
             return await _context.Products.ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<Product>> GetAllPopulateAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.Products.Include(x => x.Brand).ToListAsync(cancellationToken);
+        }
+
     }
 }
