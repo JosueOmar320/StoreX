@@ -56,5 +56,10 @@ namespace StoreX.Infrastructure.Persistence.Repositories
         {
             return await _context.ProductPrices.ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<ProductPrice>> GetAllPopulateAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.ProductPrices.Include(x => x.Product).ToListAsync(cancellationToken);
+        }
     }
 }

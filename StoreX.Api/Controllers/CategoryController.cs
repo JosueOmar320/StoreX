@@ -61,6 +61,7 @@ namespace StoreX.Api.Controllers
         [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
         public async Task<IActionResult> UpdateCategory(int id, Category category, CancellationToken cancellationToken)
         {
+            category.CategoryId = id;
             var updated = await _categoryService.UpdateAsync(category, cancellationToken);
             if (updated == null)
                 return NotFound($"No se encontró una categoría con ID {id}");

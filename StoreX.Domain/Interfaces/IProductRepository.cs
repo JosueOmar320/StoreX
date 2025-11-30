@@ -14,5 +14,8 @@ namespace StoreX.Domain.Interfaces
         Task<Product> AddAsync(Product product, CancellationToken cancellationToken = default);
         Task<Product?> UpdateAsync(Product product, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<Product>> GetAllPopulateAsync(CancellationToken cancellationToken = default);
+        //Task<IEnumerable<ProductDto>> GetAllDtoAsync(CancellationToken cancellationToken = default);
     }
 }

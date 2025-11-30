@@ -1,4 +1,5 @@
-﻿using StoreX.Domain.Entities;
+﻿using StoreX.Application.Dtos;
+using StoreX.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace StoreX.Application.Interfaces
         Task<Inventory> AddAsync(Inventory inventory, CancellationToken cancellationToken = default);
         Task<Inventory?> UpdateAsync(Inventory inventory, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<InventoryDto>> GetAllPopulateAsync(CancellationToken cancellationToken = default);
     }
 }

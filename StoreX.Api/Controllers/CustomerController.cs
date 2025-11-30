@@ -59,6 +59,7 @@ namespace StoreX.Api.Controllers
         [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
         public async Task<IActionResult> UpdateCustomer(int id, Customer customer, CancellationToken cancellationToken)
         {
+            customer.CustomerId = id;
             var updated = await _customerService.UpdateAsync(customer, cancellationToken);
             if (updated == null)
                 return NotFound($"No se encontró un cliente con ID {id}");

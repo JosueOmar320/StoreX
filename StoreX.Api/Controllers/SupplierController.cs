@@ -59,6 +59,7 @@ namespace StoreX.Api.Controllers
         [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
         public async Task<IActionResult> UpdateSupplier(int id, Supplier supplier, CancellationToken cancellationToken)
         {
+            supplier.SupplierId = id;
             var updated = await _supplierService.UpdateAsync(supplier, cancellationToken);
             if (updated == null)
                 return NotFound($"No se encontró un proveedor con ID {id}");
